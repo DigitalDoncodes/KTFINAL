@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Jobs | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="mt-3">
+
+  <h2 class="fw-bold text-primary mb-4">Available Jobs</h2>
+
+  {% if jobs %}
+  <div class="row">
+    {% for job in jobs %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm border-0 h-100">
+
+        <div class="card-body">
+          <h5 class="fw-bold text-primary">{{ job.title }}</h5>
+          <p class="text-muted small">{{ job.description }}</p>
+
+          <p>
+            <strong>Vacancies:</strong>
+            {% if job.vacancies > 0 %}
+              {{ job.vacancies }}
+            {% else %}
+              <span class="text-danger fw-bold">Filled</span>
+            {% endif %}
+          </p>
+
+          <p>
+            <strong>Deadline:</strong>
+            {{ job.deadline_str or "Not specified" }}
+          </p>
+        </div>
+
+        <div class="card-footer bg-light border-0 text-end">
+          {% if job.vacancies <= 0 %}
+            <button class="btn btn-sm btn-secondary" disabled>
+              Filled
+            </button>
+          {% else %}
+            <button
+              type="button"
+              class="btn btn-sm btn-primary apply-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#applyConfirmModal"
+              data-action="{{ url_for('apply_job', job_id=job._id) }}">
+              Apply
+            </button>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+    <div class="alert alert-info">
+      No jobs available at the moment.
+    </div>
+  {% endif %}
+
+</div>
+
+<!-- ================= CONFIRM APPLY MODAL ================= -->
+<div class="modal fade" id="applyConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+
+      <div class="modal-header"
+           style="background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;">
+        <h5 class="modal-title">Confirm Application</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-2">
+          Do you really want to apply for this job?
+        </p>
+        <p class="text-muted small mb-0">
+          Once applied, the job will be reserved for you and you cannot apply
+          for other jobs until this application is processed.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-outline-secondary"
+                data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <!-- ✅ CSRF FIXED FORM -->
+        <form id="applyConfirmForm" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-primary">
+            Yes, Apply
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const applyButtons = document.querySelectorAll(".apply-btn");
+    const confirmForm = document.getElementById("applyConfirmForm");
+
+    applyButtons.forEach(button => {
+      button.addEventListener("click", function () {
+        confirmForm.action = this.dataset.action;
+      });
+    });
+  });
+</script>
+{% endblock %}

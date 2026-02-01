@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}My Profile | Know-Thyself{% endblock %}
+
+{% block content %}
+<h2 class="fw-bold mb-3">My Profile</h2>
+
+<div class="card shadow-sm p-4">
+  <p><strong>Name:</strong> {{ user.name }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Role:</strong> Student</p>
+</div>
+{% endblock %}

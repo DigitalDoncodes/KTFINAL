@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard | Know-Thyself{% endblock %}
+
+{% block head %}
+<style>
+  /* KPI styling */
+  .kpi { border-left: 6px solid transparent; }
+  .kpi-success { border-color: #22c55e; }
+  .kpi-warning { border-color: #f59e0b; }
+  .kpi-danger  { border-color: #ef4444; }
+
+  /* Card micro-interaction */
+  .card {
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  }
+
+  /* Urgency pulse */
+  .urgent {
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 rgba(239,68,68,.4); }
+    50% { box-shadow: 0 0 16px rgba(239,68,68,.4); }
+    100% { box-shadow: 0 0 0 rgba(239,68,68,.4); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- ================= HEADER ================= -->
+  <div class="mb-4">
+    <h2 class="fw-bold text-primary">📊 Teaching Insights Dashboard</h2>
+    <p class="text-muted">
+      Overview of student applications, review workload, and correction trends.
+    </p>
+  </div>
+
+  <!-- ================= KPI CARDS ================= -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+      <div class="card kpi kpi-success shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Registered Students</h6>
+          <h2 class="fw-bold counter" data-value="{{ total_students }}">0</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card kpi shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Total Applications</h6>
+          <h2 class="fw-bold counter" data-value="{{ total_applications }}">0</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card kpi kpi-warning shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Awaiting Evaluation</h6>
+          <h2 class="fw-bold text-warning counter" data-value="{{ pending_review }}">0</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card kpi kpi-danger shadow-sm border-0 rounded-4
+        {% if corrections_needed > 10 %}urgent{% endif %}">
+        <div class="card-body">
+          <h6 class="text-muted">Student Follow-ups</h6>
+          <h2 class="fw-bold text-danger counter" data-value="{{ corrections_needed }}">0</h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= APPLICATION HEALTH ================= -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">🧠 Application Health</h6>
+
+          {% set health = 100 - (corrections_needed * 2) %}
+          {% if health < 0 %}{% set health = 0 %}{% endif %}
+
+          <div class="progress mb-2" style="height: 10px;">
+            <div class="progress-bar
+              {% if health > 70 %}bg-success
+              {% elif health > 40 %}bg-warning
+              {% else %}bg-danger{% endif %}"
+              style="width: 89%">
+            </div>
+          </div>
+
+          <small class="text-muted">
+            Overall application quality score:
+            <strong>89%</strong>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CORRECTIONS METRICS ================= -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Avg. Correction Turnaround</h6>
+          <h3 class="fw-bold">3 days</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Re-uploads Pending</h6>
+          <h3 class="fw-bold text-warning">{{ reuploads_pending }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="text-muted">Repeat Corrections</h6>
+          <h3 class="fw-bold text-danger">{{ repeat_corrections }}</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= CHARTS ================= -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">📌 Application Status Overview</h6>
+
+          {% if status_counts.approved == 0 and status_counts.pending == 0 %}
+            <div class="text-center text-muted py-5">📭 No application activity yet</div>
+          {% else %}
+            <canvas id="statusDonutChart" height="220"></canvas>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">📈 Corrections Trend (Last 7 Days)</h6>
+          <canvas id="correctionsTrendChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= JOBS WITH MOST CORRECTIONS ================= -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">🧠 Roles Requiring Attention</h6>
+          <canvas id="jobsCorrectionsChart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= OLDEST PENDING ================= -->
+  {% if oldest_corrections %}
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">⏳ Oldest Pending Corrections</h6>
+
+          <ul class="list-group list-group-flush">
+            {% for app in oldest_corrections %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ app.student_name }}</strong>
+                  <div class="text-muted small">{{ app.job_title }}</div>
+                </div>
+                <span class="badge
+                  {% if app.days_pending >= 7 %}bg-danger
+                  {% elif app.days_pending >= 4 %}bg-warning text-dark
+                  {% else %}bg-secondary{% endif %}">
+                  {{ app.days_pending }} days
+                </span>
+              </li>
+            {% endfor %}
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if corrections_needed == 0 %}
+  <div class="alert alert-success rounded-4 mt-4">
+    🎉 No pending corrections — great job!
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // -------- Animated counters --------
+  document.querySelectorAll(".counter").forEach(el => {
+    const target = +el.dataset.value;
+    let count = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+
+    const tick = () => {
+      count += step;
+      if (count >= target) {
+        el.innerText = target;
+      } else {
+        el.innerText = count;
+        requestAnimationFrame(tick);
+      }
+    };
+    tick();
+  });
+
+  // -------- STATUS DONUT --------
+  if (document.getElementById("statusDonutChart")) {
+    new Chart(statusDonutChart, {
+      type: "doughnut",
+      data: {
+        labels: ["Approved", "Rejected", "Pending", "Corrections"],
+        datasets: [{
+          data: [
+            {{ status_counts.approved }},
+            {{ status_counts.rejected }},
+            {{ status_counts.pending }},
+            {{ status_counts.corrections }}
+          ],
+          backgroundColor: ["#22c55e","#ef4444","#f59e0b","#facc15"]
+        }]
+      },
+      options: { plugins: { legend: { position: "bottom" } } }
+    });
+  }
+
+  // -------- TREND --------
+  new Chart(correctionsTrendChart, {
+    type: "line",
+    data: {
+      labels: {{ trend_labels|tojson }},
+      datasets: [{
+        data: {{ trend_values|tojson }},
+        borderColor: "#f59e0b",
+        backgroundColor: "rgba(245,158,11,.2)",
+        tension: .4,
+        fill: true
+      }]
+    },
+    options: { plugins: { legend: { display: false } } }
+  });
+
+  // -------- JOBS --------
+  new Chart(jobsCorrectionsChart, {
+    type: "bar",
+    data: {
+      labels: {{ job_labels|tojson }},
+      datasets: [{
+        data: {{ job_values|tojson }},
+        backgroundColor: "#6366f1"
+      }]
+    },
+    options: { plugins: { legend: { display: false } } }
+  });
+</script>
+{% endblock %}

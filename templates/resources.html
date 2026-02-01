@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Resources | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold text-primary display-5">
+      Student Resources 📚
+    </h1>
+    <p class="text-muted mt-3 mx-auto" style="max-width: 720px;">
+      A curated collection of tools, guides, and materials to support your
+      academic success, mental well-being, and career growth.
+    </p>
+  </div>
+
+  <!-- Resource Cards -->
+  <div class="row g-4">
+
+    <!-- Academic Writing -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 rounded-4">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3 text-primary fs-1">
+            <i class="bi bi-journal-text"></i>
+          </div>
+          <h5 class="fw-bold">Academic Writing Guide</h5>
+          <p class="text-muted small flex-grow-1">
+            Best practices for essays, reports, psychology research papers,
+            and structured academic writing.
+          </p>
+          <span class="badge bg-secondary align-self-start">
+            Coming Soon
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mental Wellness -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 rounded-4">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3 text-success fs-1">
+            <i class="bi bi-heart-pulse"></i>
+          </div>
+          <h5 class="fw-bold">Mental Wellness</h5>
+          <p class="text-muted small flex-grow-1">
+            Resources to support emotional well-being, stress management,
+            and psychological resilience.
+          </p>
+          <span class="badge bg-secondary align-self-start">
+            Coming Soon
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Development -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 rounded-4">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3 text-warning fs-1">
+            <i class="bi bi-briefcase"></i>
+          </div>
+          <h5 class="fw-bold">Career Development</h5>
+          <p class="text-muted small flex-grow-1">
+            Resume tips, interview preparation, job search strategies,
+            and career planning guidance.
+          </p>
+          <span class="badge bg-secondary align-self-start">
+            Coming Soon
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0 rounded-4">
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3 text-info fs-1">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <h5 class="fw-bold">Upcoming Events 🗓️</h5>
+          <p class="text-muted small flex-grow-1">
+            Stay updated with workshops, seminars, awareness programs,
+            and campus opportunities.
+          </p>
+          <span class="badge bg-secondary align-self-start">
+            Coming Soon
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer Note -->
+  <div class="text-center mt-5 text-muted">
+    More resources will be added continuously to support your journey 🌱
+  </div>
+
+</div>
+{% endblock %}

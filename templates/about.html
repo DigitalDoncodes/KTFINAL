@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}About Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+
+  <!-- ================= HERO ================= -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold display-5 text-primary">
+      About Know-Thyself
+    </h1>
+    <p class="text-muted mt-3 fs-5 mx-auto" style="max-width: 720px;">
+      A psychology-driven career platform designed to help students understand
+      themselves, grow intentionally, and transition confidently into the professional world.
+    </p>
+  </div>
+
+  <!-- ================= MISSION + VISION ================= -->
+  <div class="row g-4 mb-5">
+
+    <!-- Mission -->
+    <div class="col-md-6">
+      <div class="card border-0 rounded-4 h-100">
+        <div class="card-body p-4 p-lg-5">
+          <h3 class="fw-bold mb-3">🎯 Our Mission</h3>
+          <p class="text-muted fs-6 lh-lg">
+            Know-Thyself exists to bridge the gap between education and real-world
+            careers by combining <strong>self-awareness</strong>,
+            <strong>guided growth</strong>, and <strong>structured opportunities</strong>.
+          </p>
+          <p class="text-muted fs-6 lh-lg">
+            We empower students to explore who they are, what they value, and where
+            they want to grow—while giving educators meaningful tools to mentor,
+            assess, and guide them with clarity and care.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vision -->
+    <div class="col-md-6">
+      <div class="card border-0 rounded-4 h-100">
+        <div class="card-body p-4 p-lg-5">
+          <h3 class="fw-bold mb-3">🌱 Our Vision</h3>
+          <p class="text-muted fs-6 lh-lg">
+            We envision institutions where career readiness is not rushed,
+            comparison-driven, or transactional—but reflective, inclusive, and humane.
+          </p>
+          <p class="text-muted fs-6 lh-lg">
+            Know-Thyself aims to become a trusted academic companion—where
+            psychological insight meets practical opportunity, and where every
+            student is supported at their own pace.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= WHAT MAKES IT DIFFERENT ================= -->
+  <div class="card border-0 rounded-4 mb-5">
+    <div class="card-body p-4 p-lg-5">
+      <h3 class="fw-bold mb-4 text-center">✨ What Makes Know-Thyself Different</h3>
+
+      <div class="row g-4">
+
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="fs-1 mb-2">🧠</div>
+            <h6 class="fw-semibold">Psychology-First</h6>
+            <p class="text-muted small">
+              Self-assessment, reflection, and emotional awareness are core—not add-ons.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="fs-1 mb-2">📊</div>
+            <h6 class="fw-semibold">Insightful, Not Overwhelming</h6>
+            <p class="text-muted small">
+              Clear dashboards for students and teachers—focused on meaning, not noise.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="fs-1 mb-2">🤝</div>
+            <h6 class="fw-semibold">Guided by Educators</h6>
+            <p class="text-muted small">
+              Teachers remain mentors, reviewers, and facilitators—not just approvers.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CREATOR CTA ================= -->
+  <div class="text-center mt-5">
+    <p class="text-muted mb-3">
+      Built with care, intention, and a belief in meaningful growth.
+    </p>
+    <a href="{{ url_for('creator') }}"
+       class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">
+      Meet the Creator →
+    </a>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Create Job | Know-Thyself{% endblock %}
+
+{% block head %}
+<style>
+  .job-layout {
+    display: grid;
+    grid-template-columns: 1fr 2.2fr;
+    gap: 28px;
+  }
+
+  @media (max-width: 992px) {
+    .job-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* LEFT PANEL */
+  .job-side-panel {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 26px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(100,116,139,.15);
+    height: fit-content;
+  }
+
+  .job-side-panel h5 {
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .job-side-panel ul {
+    padding-left: 18px;
+    font-size: .9rem;
+  }
+
+  .job-side-panel li {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+  }
+
+  /* FORM */
+  .job-form-wrapper {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 34px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(100,116,139,.15);
+    animation: fadeUp .4s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .job-form-header h2 {
+    font-weight: 800;
+    color: #2563eb;
+  }
+
+  .form-label {
+    font-weight: 600;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid rgba(100,116,139,.35);
+  }
+
+  .form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.18);
+  }
+
+  .btn-submit {
+    background: linear-gradient(45deg,#2563eb,#22c55e);
+    color:#fff;
+    font-weight:700;
+    padding:12px 36px;
+    border-radius:999px;
+    border:none;
+  }
+
+  /* BOTTOM PREVIEW */
+  .impact-panel {
+    margin-top: 40px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: var(--card-shadow);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- ================= WORKSPACE ================= -->
+  <div class="job-layout">
+
+    <!-- LEFT CONTEXT PANEL -->
+    <aside class="job-side-panel">
+      <h5>🧠 Job Posting Guide</h5>
+      <ul>
+        <li>Clear titles attract better applicants</li>
+        <li>Mention learning outcomes clearly</li>
+        <li>Student-level requirements work best</li>
+        <li>Shorter deadlines increase engagement</li>
+      </ul>
+
+      <hr>
+
+      <h6 class="fw-semibold">📊 Current Snapshot</h6>
+      <p class="small text-muted mb-1">
+        Active Jobs: <strong>{{ jobs_count | default(0) }}</strong>
+      </p>
+      <p class="small text-muted mb-1">
+        Avg Applications / Job: <strong>{{ avg_apps | default(0) }}</strong>
+      </p>
+      <p class="small text-muted">
+        Jobs with Corrections: <strong>{{ correction_jobs | default(0) }}</strong>
+      </p>
+    </aside>
+
+    <!-- MAIN FORM -->
+    <section class="job-form-wrapper">
+      <div class="job-form-header text-center mb-4">
+        <h2><i class="bi bi-briefcase-fill"></i> Create New Job</h2>
+        <p class="text-muted">Post a new opportunity for students to apply and grow.</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('add_job') }}">
+        {{ csrf() }}
+
+        <div class="mb-3">
+          <label class="form-label">Job Title</label>
+          <input name="title" class="form-control" placeholder="e.g. Data Analyst Intern" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Job Description</label>
+          <textarea name="description" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Requirements</label>
+          <textarea name="requirements" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Application Deadline</label>
+          <input type="date" name="deadline" class="form-control" required>
+        </div>
+
+        <div class="text-center">
+          <button class="btn-submit">
+            <i class="bi bi-send-fill me-2"></i> Publish Job
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </div>
+
+  <!-- ================= LIVE IMPACT ================= -->
+  <section class="impact-panel">
+    <h5 class="fw-bold mb-2">📈 Live Dashboard Impact</h5>
+    <p class="text-muted small">
+      Newly created jobs automatically appear in teacher analytics.
+    </p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <canvas id="applicationsPerJobChart"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="jobStatusChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

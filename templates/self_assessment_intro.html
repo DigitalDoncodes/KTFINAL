@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Self Assessment | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-2">
+
+  <h2 class="fw-bold mb-2">Self Assessment</h2>
+  <p class="text-muted mb-4">
+    This guided self-assessment helps you reflect on emotions, confidence,
+    resilience, and interpersonal skills. Answer honestly — there are no
+    right or wrong answers.
+  </p>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h5 class="fw-semibold mb-2">What to expect</h5>
+      <ul class="mb-3">
+        <li>5 domains of self-awareness</li>
+        <li>5 questions per domain</li>
+        <li>Likert-scale responses</li>
+        <li>Takes about 8–10 minutes</li>
+      </ul>
+
+     <a href="{{ url_for('start_self_assessment') }}"
+   class="btn btn-success">
+  Start Self Assessment →
+</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

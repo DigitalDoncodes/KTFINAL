@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block title %}Growth Hub Reflections | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 py-10 min-h-screen">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-extrabold text-gray-900">
+        🌱 All Student Growth Hub Reflections
+      </h1>
+      <p class="mt-2 text-sm text-gray-500">
+        Review reflective submissions and monitor student growth engagement.
+      </p>
+    </div>
+
+    <!-- Search + Filters -->
+    <div class="flex flex-col md:flex-row justify-end gap-3 mb-4">
+
+      <input
+        type="text"
+        id="reflectionSearch"
+        class="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-full text-sm
+               focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="🔍 Search name, ID, prompt, or response..."
+      >
+
+      <select id="activityFilter"
+              class="px-4 py-2 border border-gray-300 rounded-full text-sm">
+        <option value="">All Activities</option>
+        <option value="Quick Survey">Quick Survey</option>
+        <option value="Mood Check-Out">Mood Check-Out</option>
+        <option value="Mini Bucket List">Mini Bucket List</option>
+        <option value="Self-Reflection">Self-Reflection</option>
+      </select>
+
+      <select id="statusFilter"
+              class="px-4 py-2 border border-gray-300 rounded-full text-sm">
+        <option value="">All Status</option>
+        <option value="Reviewed">Reviewed</option>
+      </select>
+
+    </div>
+
+    {% if growth_responses %}
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+      <table id="growth-reflection-table"
+             class="min-w-full border border-gray-200 border-collapse">
+
+        <thead class="bg-gray-50 text-xs uppercase text-gray-600 border-b">
+          <tr>
+            <th class="px-4 py-3 border">Student Name</th>
+            <th class="px-4 py-3 border">Student ID</th>
+            <th class="px-4 py-3 border">Activity</th>
+            <th class="px-4 py-3 border">Response</th>
+            <th class="px-4 py-3 border">Submitted At</th>
+            <th class="px-4 py-3 border text-center">Status</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-sm text-gray-700">
+          {% for response in growth_responses %}
+          <tr class="data-row hover:bg-gray-50 transition"
+              data-activity="{{ response.question }}"
+              data-status="Reviewed">
+
+            <td class="px-4 py-2 border font-medium">
+              {{ response.name or "Unknown" }}
+            </td>
+
+            <td class="px-4 py-2 border">
+              {{ response.student_id or "—" }}
+            </td>
+
+            <td class="px-4 py-2 border">
+              {{ response.question }}
+            </td>
+
+            <td class="px-4 py-2 border max-w-md"
+                title="{{ response.answer }}">
+              {{ response.answer[:60] }}{% if response.answer|length > 60 %}…{% endif %}
+            </td>
+
+            <td class="px-4 py-2 border whitespace-nowrap">
+              {% if response.submitted_at %}
+                {{ response.submitted_at.strftime('%d %b %Y, %I:%M %p') }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+
+            <td class="px-4 py-2 border text-center">
+              <span class="px-2 py-0.5 text-xs rounded-full
+                           bg-green-100 text-green-800">
+                Reviewed
+              </span>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination + Back -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+
+      <div class="flex items-center gap-2">
+        <button id="prevPage"
+                class="px-3 py-1 text-sm border rounded disabled:opacity-40">
+          ← Previous
+        </button>
+
+        <span id="pageInfo" class="text-sm text-gray-600"></span>
+
+        <button id="nextPage"
+                class="px-3 py-1 text-sm border rounded disabled:opacity-40">
+          Next →
+        </button>
+      </div>
+
+      <a href="{{ url_for('teacher_dashboard') }}"
+         class="inline-flex items-center px-5 py-2 rounded-full
+                text-sm font-medium text-white
+                bg-indigo-600 hover:bg-indigo-700 transition">
+        ← Back to Dashboard
+      </a>
+    </div>
+
+    {% else %}
+    <div class="mt-6 p-6 text-center text-gray-600 bg-gray-50 rounded-xl">
+      No Growth Hub reflections submitted yet.
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Search + Filters + Pagination -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const rows = Array.from(document.querySelectorAll('.data-row'));
+  const search = document.getElementById('reflectionSearch');
+  const activityFilter = document.getElementById('activityFilter');
+  const statusFilter = document.getElementById('statusFilter');
+
+  const rowsPerPage = 6;
+  let currentPage = 1;
+
+  function getFilteredRows() {
+    const text = search.value.toLowerCase();
+    const activity = activityFilter.value;
+    const status = statusFilter.value;
+
+    return rows.filter(row => {
+      return (
+        row.innerText.toLowerCase().includes(text) &&
+        (!activity || row.dataset.activity === activity) &&
+        (!status || row.dataset.status === status)
+      );
+    });
+  }
+
+  function render() {
+    const filtered = getFilteredRows();
+    const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+    currentPage = Math.min(currentPage, totalPages);
+
+    rows.forEach(r => r.style.display = 'none');
+
+    filtered
+      .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+      .forEach(r => r.style.display = '');
+
+    document.getElementById('pageInfo').innerText =
+      `Page ${currentPage} of ${totalPages}`;
+
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === totalPages;
+  }
+
+  document.getElementById('prevPage').onclick = () => {
+    if (currentPage > 1) currentPage--;
+    render();
+  };
+
+  document.getElementById('nextPage').onclick = () => {
+    currentPage++;
+    render();
+  };
+
+  [search, activityFilter, statusFilter].forEach(el => {
+    el.addEventListener('keyup', () => {
+      currentPage = 1;
+      render();
+    });
+    el.addEventListener('change', () => {
+      currentPage = 1;
+      render();
+    });
+  });
+
+  render();
+});
+</script>
+{% endblock %}

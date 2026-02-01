@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+
+  <!-- Page Heading -->
+  <div class="my-4">
+    <h2 class="fw-bold text-primary mb-1">
+      Student Dashboard
+    </h2>
+    <p class="text-muted mb-0">
+      Your personal space for reflection, growth, and progress tracking.
+    </p>
+  </div>
+
+  <!-- Motivation Card (Random per login) -->
+  <div class="card border-0 shadow-sm mb-4"
+       style="background:linear-gradient(135deg,#eef2ff,#e0f2fe);">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <h6 class="fw-bold text-primary mb-1">🌱 Today’s Motivation</h6>
+        <p class="fst-italic mb-0 text-dark">
+          “{{ dashboard_quote }}”
+        </p>
+      </div>
+      <a href="{{ url_for('motivation_hub') }}"
+         class="btn btn-sm btn-outline-primary">
+        Motivation Hub
+      </a>
+    </div>
+  </div>
+<div class="row g-4 mb-4">
+
+  <!-- Self Assessment Card -->
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title text-success fw-bold">
+          🌱 Self Assessment
+        </h5>
+        <p class="card-text text-muted">
+          Reflect on your emotions, strengths, and mindset through guided activities.
+        </p>
+        <a href="{{ url_for('student_self_assessment_intro') }}"
+           class="btn btn-success px-4">
+          Start →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Growth Hub Card -->
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h5 class="card-title text-warning fw-bold">
+          🚀 Growth Hub
+        </h5>
+        <p class="card-text text-muted">
+          Track your personal development, reflections, and learning journey.
+        </p>
+        <a href="{{ url_for('growth_hub_menu') }}"
+           class="btn btn-warning px-4">
+          Open →
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <!-- Application Status -->
+  <h4 class="fw-bold text-primary mb-3">📌 Application Status</h4>
+{% if active_app %}
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold mb-2">{{ active_app.job_title }}</h5>
+
+      <p class="mb-2">
+        <strong>Status:</strong>
+        <span class="badge 
+          {% if active_app.status == 'submitted' %}bg-info
+          {% elif active_app.status == 'under_review' %}bg-primary
+          {% elif active_app.status == 'corrections_needed' %}bg-warning text-dark
+          {% elif active_app.status == 'approved' %}bg-success
+          {% elif active_app.status == 'rejected' %}bg-danger
+          {% else %}bg-secondary{% endif %}">
+          {{ active_app.status.replace('_',' ').title() }}
+        </span>
+      </p>
+
+      {% if active_app.teacher_feedback %}
+        <div class="alert alert-info mt-3 mb-0">
+          <strong>Teacher Feedback:</strong><br>
+          {{ active_app.teacher_feedback }}
+        </div>
+      {% endif %}
+
+      {% if active_app.status == 'corrections_needed' %}
+        <a href="{{ url_for('reupload_files', app_id=active_app._id) }}"
+           class="btn btn-warning mt-3">
+          Re-upload Files
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+{% else %}
+  <div class="card shadow-sm">
+    <div class="card-body text-center py-5">
+      <i class="bi bi-briefcase fs-1 text-muted mb-3"></i>
+
+      <h5 class="fw-semibold mb-2">
+        You haven’t applied for any jobs yet
+      </h5>
+
+      <p class="text-muted mb-4">
+        Explore opportunities and start your career journey.
+      </p>
+
+      <a href="{{ url_for('student_jobs') }}"
+         class="btn btn-primary px-4">
+        🚀 Apply Now
+      </a>
+    </div>
+  </div>
+{% endif %}
+
+<!-- Quick Tips -->
+<div class="quick-tips-card mt-5">
+  <h6 class="mb-2">💡 Quick Tips</h6>
+  <ul class="mb-0">
+    <li>Apply to only one job at a time.</li>
+    <li>Upload resume & photo within 48 hours.</li>
+    <li>Check feedback regularly for updates.</li>
+  </ul>
+</div>
+</div>
+</div>
+{% endblock %}

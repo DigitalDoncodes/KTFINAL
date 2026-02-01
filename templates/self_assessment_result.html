@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Self Assessment Results | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+
+  <!-- Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">🧠 Self Assessment Results</h2>
+    <p class="text-muted">
+      This report reflects your current emotional and psychological state.
+    </p>
+  </div>
+
+  <!-- Results Grid -->
+  <div class="row g-4">
+
+    {% for domain, data in domain_scores.items() %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+
+          <h5 class="fw-bold text-capitalize">
+            {{ domain.replace('_', ' ') }}
+          </h5>
+
+          <p class="mb-1">
+            <strong>Average Score:</strong>
+            {{ data["average"] }} / 5
+          </p>
+
+          <span class="badge bg-{{ data['color'] }}">
+            {{ data["label"] }}
+          </span>
+
+          <div class="progress mt-3" style="height: 8px;">
+            <div class="progress-bar bg-{{ data['color'] }}"
+                 style="width: {{ (data['average'] / 5) * 100 }}%">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- Insight Summary -->
+  <div class="card border-0 bg-light mt-5">
+    <div class="card-body">
+      <h5 class="fw-bold mb-2">📘 Insights</h5>
+      <ul class="mb-0">
+        {% for domain, insight in insight_summary.items() %}
+          <li>
+            <strong>{{ domain.replace('_',' ') }}:</strong>
+            {{ insight }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('student_dashboard') }}"
+       class="btn btn-outline-primary px-4">
+      Back to Dashboard
+    </a>
+  </div>
+
+</div>
+{% endblock %}

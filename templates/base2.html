@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}Job Portal{% endblock %}</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    /* --- Core Typography and Base --- */
+    body { 
+      background: #f0f3f6; /* Light gray background */
+      font-family: 'Inter', sans-serif;
+      color: #333;
+    }
+    h1, h2, h3, .navbar-brand { font-family: 'Poppins', sans-serif; }
+
+    /* --- Navbar & Header --- */
+    .app-navbar {
+      background: #ffffff; /* White navbar for clean contrast */
+      border-bottom: 3px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      /* Subtle gradient border effect */
+      border-image: linear-gradient(90deg, #1e3c72, #2a5298, #43cea2) 1;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    
+    /* Logo Styling */
+    .navbar-logo {
+      height: 40px; /* Adjust size for professional look */
+      width: auto;
+      margin-right: 8px;
+      vertical-align: middle;
+      transition: transform 0.3s ease-out;
+    }
+    .navbar-logo:hover {
+        transform: scale(1.05);
+    }
+    
+    .navbar-brand { 
+      font-weight: 800; 
+      letter-spacing: 0.5px;
+      color: #1e3c72 !important; /* Deep blue text */
+      font-size: 1.6rem;
+    }
+    .navbar-nav .nav-link {
+      font-weight: 500;
+      color: #2c3e50 !important;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .navbar-nav .nav-link:hover {
+      background-color: rgba(30, 60, 114, 0.05); /* Light blue hover */
+      color: #1e3c72 !important;
+    }
+
+    /* --- Main Content Container --- */
+    .main-content-container {
+      padding-top: 20px;
+      animation: fadeIn 0.8s ease-out; /* Smooth entrance */
+    }
+
+    /* --- Footer --- */
+    .app-footer { 
+      background: linear-gradient(180deg, #2c3e50 0%, #1e3c72 100%); /* Deep blue/charcoal gradient */
+      color: #f0f3f6;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+      font-size: 0.95rem;
+    }
+    .app-footer a { color: #56c6d9; text-decoration: none; }
+    .app-footer a:hover { color: #ffffff; }
+
+    /* --- Flash Messages (Toasts) --- */
+    .toast-container {
+        z-index: 1090 !important; /* Higher than Bootstrap's default modals/popovers */
+    }
+    .toast {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    .bg-success { background-color: #43cea2 !important; } /* Green accent */
+    .bg-danger { background-color: #e74c3c !important; } /* Red accent */
+    .bg-info { background-color: #56c6d9 !important; } /* Light blue accent */
+    .btn-close-white { filter: invert(1); } /* Ensure close button is visible */
+
+    /* --- Custom Fonts (Imported via Google Fonts API) --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
+    
+    /* --- Animations --- */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg app-navbar sticky-top">
+  <div class="container-fluid container">
+    <a class="navbar-brand" href="{{ url_for('startpage') }}">
+        <img src="https://res.cloudinary.com/ddqeqxamf/image/upload/v1754506544/psychology_logo_dqa0hs.jpg" alt="Psychology Portal Logo" class="navbar-logo">
+        Career Launchpad
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        
+        {% if current_user.is_authenticated %}
+          
+          {% if current_user.role == 'teacher' %}
+            <li class="nav-item">
+                <a class="nav-link btn btn-sm btn-outline-primary ms-lg-2" href="{{ url_for('teacher_dashboard') }}">
+                    <i class="fas fa-user-tie me-1"></i> Teacher Hub
+                </a>
+            </li>
+          {% elif current_user.role == 'student' %}
+            <li class="nav-item">
+                <a class="nav-link btn btn-sm btn-outline-primary ms-lg-2" href="{{ url_for('student_dashboard') }}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Student Dashboard
+                </a>
+            </li>
+          {% endif %}
+          
+          <li class="nav-item ms-lg-2">
+              <a class="btn btn-danger btn-sm" href="{{ url_for('logout') }}">
+                  <i class="fas fa-sign-out-alt me-1"></i> Logout
+              </a>
+          </li>
+          
+        {% else %}
+          <li class="nav-item ms-lg-2">
+              <a class="btn btn-primary btn-sm" href="{{ url_for('login') }}">
+                  <i class="fas fa-sign-in-alt me-1"></i> Login
+              </a>
+          </li>
+          <li class="nav-item ms-lg-2">
+              <a class="btn btn-outline-primary btn-sm" href="{{ url_for('register') }}">
+                  <i class="fas fa-user-plus me-1"></i> Register
+              </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container main-content-container">
+  
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% set toast_class = 'bg-success' if category in ['success','info'] else 'bg-danger' %}
+            <div class="toast align-items-center animate__animated animate__fadeInRight {{ toast_class }} text-white mb-2 show" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex">
+                <div class="toast-body">
+                  <i class="fas {{ 'fa-check-circle' if category == 'success' else 'fa-exclamation-triangle' }} me-2"></i>
+                  {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+
+  {% block content %}{% endblock %}
+</div>
+
+<footer class="app-footer mt-5 pt-5 pb-3">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <h5 class="text-white fw-bold"><i class="fas fa-briefcase me-2"></i>Portal Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ url_for('job_list') }}">Browse Jobs</a></li>
+          <li><a href="{{ url_for('resources') }}">Resources & Guides</a></li>
+          <li><a href="{{ url_for('advice') }}">Career Advice</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h5 class="text-white fw-bold"><i class="fas fa-users-cog me-2"></i>About & Support</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ url_for('about') }}">About Us</a></li>
+          <li><a href="{{ url_for('contact') }}">Contact</a></li>
+          <li><a href="{{ url_for('support') }}">FAQ/Support</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h5 class="text-white fw-bold"><i class="fas fa-tools me-2"></i>Technology</h5>
+        <p class="mb-0">Powered by Python, Flask, MongoDB & Render.</p>
+        <p class="mb-0">Designed with Bootstrap 5 & modern CSS.</p>
+      </div>
+    </div>
+    <hr class="my-4 border-secondary opacity-50">
+<p class="text-muted mb-0">© {{ now.year }} Career Launchpad. All rights reserved.</p>  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Ensure we can get the current year for the footer
+  function now() {
+    return {
+      year: new Date().getFullYear()
+    };
+  }
+
+  // Show all toasts on page load
+  var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+  toastElList.forEach(function(toastEl) { 
+    // Set a longer delay for better user experience
+    new bootstrap.Toast(toastEl, {delay: 6000}).show(); 
+  });
+</script>
+</body>
+</html>

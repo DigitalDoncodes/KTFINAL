@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Self Assessment | Step {{ step }}{% endblock %}
+
+{% block content %}
+<div class="self-assessment-bg">
+  <div class="container py-5" style="max-width: 760px;">
+
+    <div class="text-center mb-4">
+      <h3 class="fw-bold text-success">🌱 Self Assessment</h3>
+      <p class="text-muted">Answer honestly. There are no right or wrong answers.</p>
+    </div>
+
+    <div class="progress mb-3">
+      <div class="progress-bar" style="width: {{ progress_percent }}%"></div>
+    </div>
+
+    <p class="text-muted text-end">Step {{ step }} of {{ total }}</p>
+
+    <div class="card shadow border-0 mt-4">
+      <div class="card-body p-5">
+
+        <form method="POST">
+
+          <!-- ✅ CSRF TOKEN (DO NOT TOUCH) -->
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+          <h4 class="text-center mb-4">
+            {{ question.question }}
+          </h4>
+
+          <!-- Likert Scale -->
+          <div class="likert-scale">
+
+            <div class="likert-labels">
+              <span>Strongly Disagree</span>
+              <span>Disagree</span>
+              <span>Neutral</span>
+              <span>Agree</span>
+              <span>Strongly Agree</span>
+            </div>
+
+            <div class="likert-options">
+              {% for label, value in likert_map.items() %}
+                <label class="likert-item">
+                  <input type="radio"
+                         name="answer"
+                         value="{{ value }}"
+                         required>
+                  <span class="circle">{{ value }}</span>
+                </label>
+              {% endfor %}
+            </div>
+
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-success px-4">
+              {% if step == total %}
+                Finish →
+              {% else %}
+                Next →
+              {% endif %}
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.self-assessment-bg {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc, #eef2ff);
+}
+
+.progress {
+  height: 8px;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.likert-scale {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.likert-labels,
+.likert-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+  gap: 10px;
+}
+
+.likert-item {
+  cursor: pointer;
+}
+
+.likert-item input {
+  display: none;
+}
+
+.circle {
+  display: inline-flex;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.likert-item input:checked + .circle {
+  background: #22c55e;
+  border-color: #16a34a;
+  color: white;
+}
+</style>
+{% endblock %}

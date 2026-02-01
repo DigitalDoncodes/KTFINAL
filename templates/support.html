@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block title %}Support Center | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h1 class="fw-bold text-primary text-center mb-3">Support Center</h1>
+        <p class="text-muted text-center mb-4">
+          Find answers to common questions and get help with the platform.
+        </p>
+
+        <div class="accordion" id="supportAccordion">
+
+          <!-- ================= ACCOUNT & REGISTRATION ================= -->
+          <h5 class="fw-bold text-secondary mt-4">Account & Registration</h5>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#acc1">
+                How do I create a student account?
+              </button>
+            </h2>
+            <div id="acc1" class="accordion-collapse collapse show">
+              <div class="accordion-body">
+                Click on <strong>Sign Up</strong> from the login page. Fill in your student ID,
+                full name, email, phone number, and create a secure password.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#acc2">
+                I forgot my password, how can I reset it?
+              </button>
+            </h2>
+            <div id="acc2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Password reset is currently handled manually.
+                Please contact
+                <a href="mailto:psychologyresumemail@gmail.com">psychologyresumemail@gmail.com</a>.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#acc3">
+                Why is my student ID not working during login?
+              </button>
+            </h2>
+            <div id="acc3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Ensure your student ID is entered exactly as registered.
+                Student IDs are case-sensitive.
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= JOB APPLICATION PROCESS ================= -->
+          <h5 class="fw-bold text-secondary mt-4">Job Application Process</h5>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#job1">
+                How can a student apply for a job?
+              </button>
+            </h2>
+            <div id="job1" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Students can apply from the <strong>Jobs</strong> section.
+                Only one active application is allowed at a time.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#job2">
+                Why can I only apply for one job at a time?
+              </button>
+            </h2>
+            <div id="job2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                This ensures focused applications and fair evaluation.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#job3">
+                How long do I have to upload my resume?
+              </button>
+            </h2>
+            <div id="job3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                You have <strong>48 hours</strong> after applying to upload your resume.
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= RESUME & DOCUMENTS ================= -->
+          <h5 class="fw-bold text-secondary mt-4">Resume & Documents</h5>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#res1">
+                What should I include in my resume?
+              </button>
+            </h2>
+            <div id="res1" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Include education, skills, experience, projects, certifications, and achievements.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#res2">
+                What is the maximum resume file size?
+              </button>
+            </h2>
+            <div id="res2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Maximum allowed size is <strong>5MB (3MB + 2MB)</strong>.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#res3">
+                I uploaded the wrong resume. What should I do?
+              </button>
+            </h2>
+            <div id="res3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Email
+                <a href="mailto:psychologyresumemail@gmail.com">psychologyresumemail@gmail.com</a>
+                or
+                <a href="mailto:dhatchinamoorthiai@gmail.com">dhatchinamoorthiai@gmail.com</a>.
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= APPLICATION STATUS ================= -->
+          <h5 class="fw-bold text-secondary mt-4">Application Status & Timeline</h5>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#stat1">
+                When will my job be confirmed?
+              </button>
+            </h2>
+            <div id="stat1" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                After resume upload, teachers review and update status.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#stat2">
+                What does “corrections needed” mean?
+              </button>
+            </h2>
+            <div id="stat2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Teachers require changes. Check feedback on dashboard.
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= MOBILE ================= -->
+          <h5 class="fw-bold text-secondary mt-4">Mobile & Accessibility</h5>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#mob1">
+                Can I use this portal on my phone?
+              </button>
+            </h2>
+            <div id="mob1" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Not Recommended for phone.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#mob2">
+                Does it work on all browsers?
+              </button>
+            </h2>
+            <div id="mob2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Works best on Chrome, Firefox, Safari, and Edge.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <p class="text-center text-muted mb-0">
+          Still need help? Visit the <a href="{{ url_for('contact') }}">Contact page</a>.
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% block title %}Creator Profile{% endblock %}
+{% block content %}
+
+<style>
+:root {
+  --bg: #eef1f7;
+  --card: #ffffff;
+  --dark: #0f172a;
+  --muted: #475569;
+  --blue: #4f6ef7;
+  --border: #e2e8f0;
+}
+
+/* ---------- Base ---------- */
+body {
+  background: var(--bg);
+}
+
+.section {
+  padding: 3rem 0;
+}
+
+.container-max {
+  max-width: 1300px;
+  margin: auto;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 2rem;
+  border: 1px solid var(--border);
+}
+
+/* ---------- Layout Grids ---------- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+/* ---------- Header ---------- */
+.creator-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.creator-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 14px;           /* soft square */
+  overflow: hidden;
+  background: #ffffff;
+
+  /* 🔥 Intentional frame */
+border: 2px solid rgba(15,23,42,0.8);   /* soft black (not harsh) */
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.creator-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ---------- Tables ---------- */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.spec-table td {
+  padding: .75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: .9rem;
+}
+
+.spec-table td:first-child {
+  font-weight: 600;
+  width: 35%;
+  color: var(--dark);
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: .75rem;
+  padding: .3rem .6rem;
+  border-radius: 6px;
+  margin-right: .3rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .creator-header,
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<!-- ================= CREATOR OVERVIEW ================= -->
+<section class="section">
+  <div class="container-max">
+    <div class="card creator-header">
+
+      <div class="creator-avatar">
+        <img src="https://res.cloudinary.com/dmtsr85ly/image/upload/v1769863769/Screenshot_20251201-190133_4_tjzdmi.jpg">
+      </div>
+
+      <div>
+        <h1 class="fw-bold mb-1">Dhatchina Moorthi TA</h1>
+        <p class="text-muted mb-2">
+          Full-Stack Developer · Platform Architect · Educational Technology Designer · Psychology Student
+        </p>
+
+        <div class="mb-3">
+          <span class="badge">Python</span>
+          <span class="badge">Flask</span>
+          <span class="badge">MongoDB</span>
+          <span class="badge">RBAC</span>
+          <span class="badge">FastAPI</span>
+        </div>
+
+        <p class="text-muted">
+          Creator and sole developer of <strong>Know-Thyself</strong>, a role-based academic
+          and student-development platform designed in collaboration with the
+          Psychology Department at Kumaraguru College.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROLE MATRIX ================= -->
+<section class="section">
+  <div class="container-max">
+    <div class="grid-3">
+
+      <div class="card">
+        <h6 class="fw-bold">Primary Role</h6>
+        <p class="text-muted small">
+          System architecture, backend logic, database design, access control,
+          and deployment structure.
+        </p>
+      </div>
+
+      <div class="card">
+        <h6 class="fw-bold">Design Responsibility</h6>
+        <p class="text-muted small">
+          UI structure, information hierarchy, student-centric workflows,
+          and cognitive-load reduction.
+        </p>
+      </div>
+
+      <div class="card">
+        <h6 class="fw-bold">Institutional Collaboration</h6>
+        <p class="text-muted small">
+          Requirement gathering, academic workflow mapping, and faculty feedback
+          integration.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROBLEM DECOMPOSITION ================= -->
+<section class="section">
+  <div class="container-max">
+    <div class="card">
+      <h4 class="fw-bold mb-3">Problem Decomposition</h4>
+
+      <div class="grid-4">
+        <div>
+          <h6 class="fw-bold">Data Fragmentation</h6>
+          <p class="small text-muted">Multiple unconnected tools and spreadsheets.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold">Manual Processes</h6>
+          <p class="small text-muted">High administrative effort, low traceability.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold">Student Blind Spots</h6>
+          <p class="small text-muted">No visibility into applications or growth.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold">Scalability Limits</h6>
+          <p class="small text-muted">Systems not designed for long-term expansion.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE ================= -->
+<section class="section">
+  <div class="container-max">
+    <div class="grid-2">
+
+      <div class="card">
+        <h4 class="fw-bold mb-3">Platform Architecture</h4>
+        <table class="spec-table">
+          <tr><td>Backend</td><td>Python · Flask</td></tr>
+          <tr><td>Database</td><td>MongoDB (document-based)</td></tr>
+          <tr><td>Auth Model</td><td>Role-Based Access Control</td></tr>
+          <tr><td>Frontend</td><td>Jinja · Bootstrap · Custom CSS</td></tr>
+          <tr><td>Deployment</td><td>Modular, scalable structure</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h4 class="fw-bold mb-3">User Roles Implemented</h4>
+        <table class="spec-table">
+          <tr><td>Student</td><td>Applications, growth tracking, self-assessment</td></tr>
+          <tr><td>Faculty</td><td>Task creation, content upload, monitoring</td></tr>
+          <tr><td>Admin</td><td>System control, analytics, access management</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section class="section">
+  <div class="container-max">
+    <div class="card">
+      <h4 class="fw-bold mb-3">Implementation Status & Roadmap</h4>
+
+      <div class="grid-3">
+        <div>
+          <h6 class="fw-bold">Completed</h6>
+          <p class="small text-muted">RBAC, placement module, dashboards, tracking.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold">In Progress</h6>
+          <p class="small text-muted">Analytics, reporting, performance metrics.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold">Planned</h6>
+          <p class="small text-muted">AI insights, cross-department rollout.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

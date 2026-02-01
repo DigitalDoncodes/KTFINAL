@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Self Assessment | {{ student.name if student else "Student" }}{% endblock %}
+
+{% block head %}
+<style>
+  .assessment-wrapper {
+    max-width: 900px;
+    margin: 32px auto;
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 32px;
+    animation: fadeIn .4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 26px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .assessment-header h2 {
+    font-weight: 800;
+    color: #2563eb;
+    margin: 0;
+  }
+
+  .student-meta {
+    font-size: .9rem;
+    color: var(--text-muted);
+  }
+
+  .assessment-section {
+    margin-bottom: 28px;
+  }
+
+  .assessment-section h6 {
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .answer-box {
+    background: rgba(100,116,139,0.08);
+    border: 1px solid rgba(100,116,139,0.2);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: .95rem;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  [data-theme="dark"] .answer-box {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .score-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .8rem;
+    background: #e0e7ff;
+    color: #1e3a8a;
+  }
+
+  .back-btn {
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="assessment-wrapper">
+
+  <!-- ================= HEADER ================= -->
+  <div class="assessment-header">
+    <div>
+      <h2><i class="bi bi-clipboard-heart-fill"></i> Self Assessment Review</h2>
+      <div class="student-meta">
+        {{ student.name if student else "Unknown Student" }} ·
+        {{ student.email if student else "N/A" }}
+      </div>
+    </div>
+
+    {% if assessment.submitted_at %}
+      <div class="score-pill">
+        Submitted · {{ assessment.submitted_at.strftime("%d %b %Y") }}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- ================= QUESTIONS ================= -->
+
+  {% for key, value in assessment.items() %}
+    {% if key not in ["_id", "student_id", "submitted_at"] %}
+      <div class="assessment-section">
+        <h6>
+          <i class="bi bi-chat-square-text"></i>
+          {{ key.replace("_", " ").title() }}
+        </h6>
+
+        <div class="answer-box">
+          {{ value if value else "—" }}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <!-- ================= BACK ================= -->
+  <a href="{{ url_for('teacher_self_assessments') }}" class="back-btn text-primary">
+    <i class="bi bi-arrow-left"></i> Back to all self assessments
+  </a>
+
+</div>
+{% endblock %}

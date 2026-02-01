@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Growth Hub - Teacher{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">🌱 Growth Hub – Student Progress</h2>
+
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Student Name</th>
+        <th>Email</th>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Submitted At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in growth_data %}
+      <tr>
+        <td>{{ record.student_name }}</td>
+        <td>{{ record.student_email }}</td>
+        <td>{{ record.question }}</td>
+        <td>{{ record.answer }}</td>
+        <td>{{ record.submitted_at or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

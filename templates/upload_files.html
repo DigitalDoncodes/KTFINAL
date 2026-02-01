@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Upload Files | Know-Thyself{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 720px;">
+  <h3 class="mb-3">Upload Resume & Photo</h3>
+
+  <div class="card p-4 shadow-sm">
+    <p><strong>Job:</strong> {{ app.job_title }}</p>
+    <p class="text-muted small"><strong>Application ID:</strong> {{ app._id }}</p>
+
+    {% if app.status == 'corrections_needed' %}
+      <div class="alert alert-warning fw-semibold text-center">
+        ⚙️ Corrections needed — please upload updated files.
+      </div>
+    {% elif app.status == 'submitted' %}
+      <div class="alert alert-success text-center">
+        ✅ Files already uploaded. Waiting for review.
+      </div>
+    {% endif %}
+
+    {% if app.status in ['upload_required', 'corrections_needed'] %}
+<form method="POST" enctype="multipart/form-data">
+  {{ csrf() }}
+
+  <div class="mb-3">
+    <label class="form-label">Resume</label>
+    <input type="file" name="resume" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Photo</label>
+    <input type="file" name="photo" class="form-control" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+    {% endif %}
+
+    {% if deadline_iso %}
+      <p class="mt-4 small">
+        <strong>Upload deadline:</strong>
+        <span id="uploadDeadline"
+              data-deadline="{{ deadline_iso }}"
+              class="fw-semibold text-danger"></span>
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const el = document.getElementById("uploadDeadline");
+  if (!el) return;
+
+  const target = new Date(el.dataset.deadline).getTime();
+
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      el.innerText = "Expired";
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    el.innerText = `${h}h ${m}m ${s}s`;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+});
+</script>
+{% endblock %}

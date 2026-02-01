@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Growth Hub - {{ theme|capitalize }}{% endblock %}
+
+{% block head %}
+<style>
+  .question-card {
+    display: none;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    animation: fadeIn 0.4s ease;
+  }
+  .question-card.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .progress-container {
+    background: #e5e7eb;
+    border-radius: 20px;
+    height: 16px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(270deg, #2563eb, #7c3aed, #0ea5e9);
+    background-size: 400% 400%;
+    animation: gradientMove 5s ease infinite;
+    transition: width 0.4s ease;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 22px;
+  }
+
+  .btn {
+    border-radius: 25px;
+    font-weight: 600;
+    padding: 10px 22px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- TITLE + DICE -->
+  <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+    <h2 class="fw-bold mb-0">
+      🌱 Growth Hub: {{ theme.replace('_', ' ').title() }}
+    </h2>
+
+    <!-- Dice = reshuffle -->
+    <a href="{{ url_for('student_growth_theme', theme=theme, shuffle=1) }}"
+       class="btn btn-outline-secondary rounded-circle"
+       title="Shuffle questions">
+      🎲
+    </a>
+  </div>
+
+  <!-- Progress (soft, no total) -->
+  <div class="progress-container">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+  <p class="text-center text-muted mb-4">
+    Reflect honestly and move at your own pace 🌱
+  </p>
+
+  <!-- FORM START -->
+  <form method="POST" action="{{ url_for('student_growth_theme', theme=theme) }}">
+
+    {% for q in questions %}
+    <div class="question-card {% if loop.index == 1 %}active{% endif %}">
+      <h5 class="fw-semibold mb-3">
+        {{ loop.index }}. {{ q.question }}
+      </h5>
+
+      <textarea
+        name="q{{ q.id }}"
+        class="form-control"
+        rows="4"
+        placeholder="Write your thoughts..."
+      >{{ saved_answers.get(q.id, '') }}</textarea>
+    </div>
+    {% endfor %}
+
+    <!-- Buttons -->
+    <div class="nav-buttons">
+      <a href="{{ url_for('growth_hub_menu') }}" class="btn btn-outline-secondary">
+        ⬅ Back to Themes
+      </a>
+
+      <button type="button" id="prevBtn" class="btn btn-secondary" disabled>
+        ⬅ Previous
+      </button>
+
+      <button type="button" id="nextBtn" class="btn btn-primary">
+        Next ➡
+      </button>
+
+      <button type="submit" name="save_partial" value="1"
+              class="btn btn-warning text-white">
+        💾 Save & Continue Later
+      </button>
+
+      <button type="submit" name="submit_all" value="1"
+              id="submitBtn" class="btn btn-success d-none">
+        ✅ Submit
+      </button>
+    </div>
+
+  </form>
+  <!-- FORM END -->
+
+</div>
+
+<script>
+  const total = {{ questions|length }};
+  let current = 1;
+
+  function showQuestion(n) {
+    document.querySelectorAll('.question-card').forEach((card, i) => {
+      card.classList.toggle('active', i === n - 1);
+    });
+
+    // Soft progress (no real total exposure)
+    document.getElementById("progressBar").style.width =
+      Math.min(n * 3, 100) + "%";
+
+    document.getElementById("prevBtn").disabled = (n === 1);
+    document.getElementById("nextBtn").style.display =
+      (n === total) ? "none" : "inline-block";
+    document.getElementById("submitBtn").classList.toggle("d-none", n !== total);
+  }
+
+  document.getElementById("nextBtn").onclick = () => {
+    if (current < total) { current++; showQuestion(current); }
+  };
+
+  document.getElementById("prevBtn").onclick = () => {
+    if (current > 1) { current--; showQuestion(current); }
+  };
+
+  showQuestion(current);
+</script>
+{% endblock %}

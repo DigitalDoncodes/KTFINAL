@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Create Job | Know-Thyself{% endblock %}
+
+{% block head %}
+<style>
+  /* ================= FORM CONTAINER ================= */
+  .job-form-wrapper {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 32px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(100,116,139,0.15);
+    animation: fadeUp .5s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ================= HEADER ================= */
+  .job-form-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .job-form-header h2 {
+    font-weight: 800;
+    color: #2563eb;
+    margin-bottom: 6px;
+  }
+
+  .job-form-header p {
+    font-size: .95rem;
+    color: var(--text-muted);
+  }
+
+  /* ================= SECTION DIVIDER ================= */
+  .form-section {
+    margin-bottom: 26px;
+  }
+
+  .form-section h6 {
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ================= INPUTS ================= */
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: .95rem;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid rgba(100,116,139,.35);
+    transition: border .2s ease, box-shadow .2s ease;
+  }
+
+  .form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.18);
+    background: transparent;
+  }
+
+  textarea.form-control {
+    resize: vertical;
+  }
+
+  .form-text {
+    font-size: .8rem;
+    color: var(--text-muted);
+  }
+
+  /* ================= SUBMIT ================= */
+  .submit-wrap {
+    text-align: center;
+    margin-top: 28px;
+  }
+
+  .btn-submit {
+    background: linear-gradient(45deg, #2563eb, #22c55e);
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 32px;
+    border-radius: 999px;
+    border: none;
+    font-size: .95rem;
+    letter-spacing: .02em;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37,99,235,.35);
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media(max-width: 768px) {
+    .job-form-wrapper {
+      margin: 20px;
+      padding: 24px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="job-form-wrapper">
+
+  <!-- ================= HEADER ================= -->
+  <div class="job-form-header">
+    <h2><i class="bi bi-briefcase-fill"></i> Create New Job</h2>
+    <p>Post a new opportunity for students to apply and grow.</p>
+  </div>
+
+  <form method="POST" action="{{ url_for('add_job') }}">
+    {{ csrf() }}
+
+    <!-- ================= BASIC INFO ================= -->
+    <div class="form-section">
+      <h6><i class="bi bi-card-text"></i> Job Details</h6>
+
+      <div class="mb-3">
+        <label class="form-label">Job Title</label>
+        <input
+          type="text"
+          name="title"
+          class="form-control"
+          placeholder="e.g. Data Analyst Intern"
+          required>
+        <div class="form-text">
+          Clear titles attract better student matches.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Job Description</label>
+        <textarea
+          name="description"
+          class="form-control"
+          rows="4"
+          placeholder="Brief overview of responsibilities and learning outcomes"
+          required></textarea>
+      </div>
+    </div>
+
+    <!-- ================= REQUIREMENTS ================= -->
+    <div class="form-section">
+      <h6><i class="bi bi-check2-circle"></i> Requirements</h6>
+
+      <div class="mb-3">
+        <textarea
+          name="requirements"
+          class="form-control"
+          rows="3"
+          placeholder="Skills, tools, or prerequisites (optional)"></textarea>
+        <div class="form-text">
+          Tip: Keep it realistic for student level.
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= DEADLINE ================= -->
+    <div class="form-section">
+      <h6><i class="bi bi-calendar-event"></i> Application Timeline</h6>
+
+      <div class="mb-3">
+        <label class="form-label">Application Deadline</label>
+        <input type="date" name="deadline" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- ================= SUBMIT ================= -->
+    <div class="submit-wrap">
+      <button type="submit" class="btn-submit">
+        <i class="bi bi-send-fill me-2"></i> Publish Job
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
